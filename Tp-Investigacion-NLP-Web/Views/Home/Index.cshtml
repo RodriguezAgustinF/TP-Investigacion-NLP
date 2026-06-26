@@ -1,8 +1,26 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    Layout = "_AnonimoLayout";
+    ViewData["Title"] = "Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="auth-page">
+    <div class="card home-card text-center">
+        <div class="card-body">
+            <h1 class="display-5 mb-3">NLP</h1>
+
+            <div class="d-grid gap-2">
+                <a asp-controller="Usuario"
+                   asp-action="Login"
+                   class="btn btn-primary btn-lg">
+                    Iniciar sesion
+                </a>
+
+                <a asp-controller="Usuario"
+                   asp-action="Registro"
+                   class="btn btn-outline-secondary btn-lg">
+                    Registrarse
+                </a>
+            </div>
+        </div>
+    </div>
 </div>

@@ -1,0 +1,40 @@
+﻿@{
+    Layout = "_BaseLayout";
+}
+
+@section Menu {
+    <nav class="navbar navbar-expand-lg app-navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="" asp-controller="Consorcio" asp-action="Index">
+                <span class="brand-mark">AC</span>
+                Administracion de Consorcios
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarLogueado" aria-controls="navbarLogueado"
+                    aria-expanded="false" aria-label="Mostrar navegacion">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div id="navbarLogueado" class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Consorcio" asp-action="Index">Mis Consorcios</a>
+                    </li>
+                </ul>
+                <form class="d-flex" asp-area="" asp-controller="Usuario" asp-action="Logout" method="post">
+                    <button type="submit" class="btn btn-outline-danger">
+                        Cerrar sesion
+                    </button>
+                </form>
+            </div>
+        </div>
+    </nav>
+}
+
+<div class="container app-content">
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
+
+@section Scripts {
+    @await RenderSectionAsync("Scripts", required: false)
+}

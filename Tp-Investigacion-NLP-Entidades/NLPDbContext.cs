@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Tp_Investigacion_NLP_Entidades.Entidades;
 
 namespace Tp_Investigacion_NLP_Entidades;
 

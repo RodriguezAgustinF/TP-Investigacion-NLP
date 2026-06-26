@@ -1,0 +1,58 @@
+﻿@{
+    Layout = "_AnonimoLayout";
+    ViewData["Title"] = "Registrarse";
+}
+@section Scripts
+{
+    <script src="~/js/Usuario/ValidacionFormRegistro.js"></script>
+}
+@model RegistroViewModel
+
+<div class="auth-page">
+    <div class="card auth-card">
+        <div class="card-body">
+            <div class="text-center mb-4">
+                <h2>Registrarse</h2>
+                <p class="text-muted">Crea una cuenta para administrar tus consorcios.</p>
+            </div>
+
+            <form asp-action="Registro" asp-controller="Usuario" method="post">
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Nombre" class="form-label"></label>
+                    <input asp-for="Nombre" class="form-control" />
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label"></label>
+                    <input asp-for="Password" type="password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="ConfirmarPassword" class="form-label">Confirme la contrasena</label>
+                    <input asp-for="ConfirmarPassword" type="password" class="form-control" />
+                    <span asp-validation-for="ConfirmarPassword" class="text-danger"></span>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        Registrarse
+                    </button>
+                </div>
+            </form>
+
+            <div class="text-center mt-4">
+                <a asp-action="Login" asp-controller="Usuario">
+                    Ya tienes cuenta? Inicia sesion
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

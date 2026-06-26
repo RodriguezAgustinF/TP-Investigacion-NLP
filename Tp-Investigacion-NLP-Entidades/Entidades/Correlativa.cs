@@ -1,4 +1,4 @@
-﻿namespace Tp_Investigacion_NLP_Entidades;
+﻿namespace Tp_Investigacion_NLP_Entidades.Entidades;
 
 public class Correlativa
 {

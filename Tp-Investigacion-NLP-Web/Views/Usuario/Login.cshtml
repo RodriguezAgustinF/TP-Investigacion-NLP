@@ -1,0 +1,50 @@
+﻿@{
+    Layout = "_AnonimoLayout";
+    ViewData["Title"] = "Iniciar Sesión";
+}
+@section Scripts
+{
+    <script src="~/js/Usuario/ValidacionFormLogin.js"></script>
+}
+@model LoginViewModel
+
+<div class="auth-page">
+    <div class="card auth-card">
+        <div class="card-body">
+            <div class="text-center mb-4">
+                <h2>Iniciar sesion</h2>
+                <p class="text-muted">Ingresa tus credenciales para acceder al panel del consorcio.</p>
+            </div>
+
+            <form asp-action="Login" asp-controller="Usuario" method="post">
+                <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Password" class="form-label"></label>
+                    <input asp-for="Password" type="password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        Ingresar
+                    </button>
+                </div>
+            </form>
+
+            <div class="text-center mt-4">
+                <a asp-action="Registro" asp-controller="Usuario">
+                    No tienes una cuenta? Registrate
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

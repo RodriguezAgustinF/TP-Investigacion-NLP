@@ -1,0 +1,104 @@
+﻿@model ChatViewModel
+
+@{
+    ViewData["Title"] = "Chat";
+}
+
+<div class="row">
+
+    <div class="col-3">
+
+        <h4>Conversaciones</h4>
+
+        <form asp-action="NuevaConversacion" method="post">
+
+            <button class="btn btn-success w-100 mb-3">
+                Nuevo Chat
+            </button>
+
+        </form>
+
+        <div class="list-group">
+
+            @foreach (var c in Model.Conversaciones)
+            {
+                <a asp-action="Conversacion"
+                   asp-route-id="@c.Id"
+                   class="list-group-item">
+
+                    @c.Titulo
+
+                </a>
+            }
+
+        </div>
+
+    </div>
+
+    <div class="col-9">
+
+        <h3>@Model.ConversacionActual.Titulo</h3>
+
+        <hr />
+
+        <div style="height:400px; overflow-y:auto; border:1px solid #ccc; padding:15px;">
+
+            @foreach (var mensaje in Model.ConversacionActual.Mensajes)
+            {
+                if (mensaje.Rol == "user")
+                {
+                    <div class="text-end mb-3">
+
+                        <span class="badge bg-primary">
+                            Vos
+                        </span>
+
+                        <br />
+
+                        @mensaje.Contenido
+
+                    </div>
+                }
+                else
+                {
+                    <div class="text-start mb-3">
+
+                        <span class="badge bg-success">
+                            Asistente
+                        </span>
+
+                        <br />
+
+                        @mensaje.Contenido
+
+                    </div>
+                }
+            }
+
+        </div>
+
+        <br />
+
+        <form asp-action="EnviarMensaje" method="post">
+
+            <input type="hidden"
+                   name="conversacionId"
+                   value="@Model.ConversacionActual.Id" />
+
+            <div class="input-group">
+
+                <input asp-for="NuevoMensaje"
+                       class="form-control"
+                       placeholder="Escribí un mensaje..." />
+
+                <button class="btn btn-primary">
+                    Enviar
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

@@ -1,4 +1,12 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿document.addEventListener('submit', function (event) {
+    const form = event.target.closest('form');
+    const confirmMessage = event.submitter?.dataset.confirm || form?.dataset.confirm;
 
-// Write your JavaScript code.
+    if (!confirmMessage) {
+        return;
+    }
+
+    if (!confirm(confirmMessage)) {
+        event.preventDefault();
+    }
+});
