@@ -33,13 +33,12 @@ public class OllamaService : ILLMService
             Role = "system",
             Content =
 """
-Sos un asistente universitario.
+Sos un asistente de inteligencia artificial.
 
 Respondé siempre en español.
 
 Si no conocés una respuesta decilo.
 
-Más adelante vas a poder consultar una base de datos con universidades, carreras y materias.
 """
         });
 

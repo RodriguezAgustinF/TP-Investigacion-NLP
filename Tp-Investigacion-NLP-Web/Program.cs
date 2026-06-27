@@ -19,6 +19,10 @@ builder.Services.Configure<OllamaSettings>(
     builder.Configuration.GetSection("Ollama"));
 
 builder.Services.AddHttpClient();
+builder.Services.AddHttpClient<ILLMService, OllamaService>(client =>
+{
+    client.Timeout = TimeSpan.FromMinutes(5);
+});
 
 builder.Services.AddScoped<ILLMService, OllamaService>();
 builder.Services.AddScoped<IChatLogica, ChatLogica>();
