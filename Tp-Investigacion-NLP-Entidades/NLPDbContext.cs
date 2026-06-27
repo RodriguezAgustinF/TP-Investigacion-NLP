@@ -9,7 +9,7 @@ public class NLPDbContext : DbContext
     public DbSet<Carrera> Carreras { get; set; }
     public DbSet<Conversacion> Conversaciones { get; set; }
     public DbSet<Correlativa> Correlativas { get; set; }
-    public DbSet<Materia> Materia { get; set; }
+    public DbSet<Materia> Materias { get; set; }
     public DbSet<Mensaje> Mensajes { get; set; }
     public DbSet<Universidad> Universidades { get; set; }
 

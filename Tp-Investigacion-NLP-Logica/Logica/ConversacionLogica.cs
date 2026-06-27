@@ -54,4 +54,11 @@ public class ConversacionLogica : IConversacionLogica
 
         return conversacion;
     }
+
+    public Conversacion ObtenerConversacionCompleta(int conversacionId)
+    {
+        return _db.Conversaciones
+                .Include(c => c.Mensajes)
+                .First(c => c.Id == conversacionId);
+    }
 }

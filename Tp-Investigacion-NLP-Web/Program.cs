@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Tp_Investigacion_NLP_Entidades;
+using Tp_Investigacion_NLP_Logica;
 using Tp_Investigacion_NLP_Logica.Interfaces;
 using Tp_Investigacion_NLP_Logica.Logica;
 using Tp_Investigacion_NLP_Web.Middleware;
@@ -11,7 +12,16 @@ db.Database.Migrate();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.Configure<OpenAISettings>(
+    builder.Configuration.GetSection("OpenAI"));
 
+builder.Services.Configure<OllamaSettings>(
+    builder.Configuration.GetSection("Ollama"));
+
+builder.Services.AddHttpClient();
+
+builder.Services.AddScoped<ILLMService, OllamaService>();
+builder.Services.AddScoped<IChatLogica, ChatLogica>();
 builder.Services.AddDbContext<NLPDbContext>();
 builder.Services.AddScoped<IUsuarioLogica, UsuarioLogica>();
 builder.Services.AddScoped<IConversacionLogica, ConversacionLogica>();

@@ -8,14 +8,12 @@ namespace Tp_Investigacion_NLP_Web.Controllers
     public class ChatController : Controller
     {
         private readonly IConversacionLogica _conversacionLogica;
-        private readonly IMensajeLogica _mensajeLogica;
+        private readonly IChatLogica _chatLogica;
 
-        public ChatController(
-            IConversacionLogica conversacionLogica,
-            IMensajeLogica mensajeLogica)
+        public ChatController(IConversacionLogica conversacionLogica, IChatLogica chatLogica)
         {
             _conversacionLogica = conversacionLogica;
-            _mensajeLogica = mensajeLogica;
+            _chatLogica = chatLogica;
         }
 
         [HttpGet]
@@ -65,7 +63,7 @@ namespace Tp_Investigacion_NLP_Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult EnviarMensaje(int conversacionId, string nuevoMensaje)
+        public async Task<IActionResult> EnviarMensaje(int conversacionId, string nuevoMensaje)
         {
             if (string.IsNullOrWhiteSpace(nuevoMensaje))
             {
@@ -75,13 +73,7 @@ namespace Tp_Investigacion_NLP_Web.Controllers
                 });
             }
 
-            _mensajeLogica.AgregarMensajeUsuario(conversacionId, nuevoMensaje);
-
-            // Después esta línea será reemplazada por OpenAI
-            _mensajeLogica.AgregarMensajeAsistente(
-                conversacionId,
-                "Todavía no tengo integrada la IA."
-            );
+            await _chatLogica.EnviarMensajeAsync(conversacionId, nuevoMensaje);
 
             return RedirectToAction(nameof(Index), new
             {
