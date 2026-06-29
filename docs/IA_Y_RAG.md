@@ -19,10 +19,6 @@ Usa `OllamaApiClient`, por defecto con `qwen3:8b`. Es local y no requiere creden
 
 Utiliza el cliente compatible con OpenAI apuntando a `GithubModels:BaseUrl`. Necesita `GithubModels:Token`.
 
-### OpenAI
-
-Utiliza `OpenAI.Chat.ChatClient` adaptado con `AsIChatClient()`. Necesita `OpenAI:ApiKey`.
-
 ## Construcción del contexto
 
 `ChatbotService` agrega:

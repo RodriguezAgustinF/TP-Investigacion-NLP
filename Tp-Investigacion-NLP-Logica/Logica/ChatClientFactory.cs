@@ -9,23 +9,20 @@ using Tp_Investigacion_NLP_Logica.Interfaces;
 namespace Tp_Investigacion_NLP_Logica.Logica;
 
 /// <summary>
-/// Adapta Ollama, GitHub Models y OpenAI a <see cref="IChatClient"/>.
+/// Adapta Ollama y GitHub Models a <see cref="IChatClient"/>.
 /// </summary>
 public sealed class ChatClientFactory : IChatClientFactory
 {
     private readonly OllamaSettings _ollama;
-    private readonly OpenAISettings _openAi;
     private readonly GithubModelsSettings _github;
     private readonly ILoggerFactory _loggerFactory;
 
     public ChatClientFactory(
         IOptions<OllamaSettings> ollama,
-        IOptions<OpenAISettings> openAi,
         IOptions<GithubModelsSettings> github,
         ILoggerFactory loggerFactory)
     {
         _ollama = ollama.Value;
-        _openAi = openAi.Value;
         _github = github.Value;
         _loggerFactory = loggerFactory;
     }
@@ -35,7 +32,6 @@ public sealed class ChatClientFactory : IChatClientFactory
     {
         IChatClient clienteBase = provider switch
         {
-            LLMProvider.OpenAI => CrearOpenAi(),
             LLMProvider.Github => CrearGithubModels(),
             _ => new OllamaApiClient(new Uri(_ollama.BaseUrl), _ollama.Model)
         };
@@ -45,12 +41,6 @@ public sealed class ChatClientFactory : IChatClientFactory
             .UseFunctionInvocation()
             .UseLogging(_loggerFactory)
             .Build();
-    }
-
-    private IChatClient CrearOpenAi()
-    {
-        ValidarSecreto(_openAi.ApiKey, "OPENAI_API_KEY");
-        return new OpenAI.Chat.ChatClient(_openAi.Model, _openAi.ApiKey).AsIChatClient();
     }
 
     private IChatClient CrearGithubModels()

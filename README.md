@@ -6,7 +6,7 @@ Prototipo académico de un chatbot construido con ASP.NET Core MVC y .NET 10.
 
 - ASP.NET Core MVC y endpoint REST para la interfaz conversacional.
 - `Microsoft.Extensions.AI.IChatClient` como abstracción común de proveedores.
-- Ollama, OpenAI y GitHub Models intercambiables desde la interfaz.
+- Ollama y GitHub Models intercambiables desde la interfaz.
 - Semantic Kernel para publicar funciones nativas como herramientas del modelo.
 - Recuperación de conocimiento interno tipo RAG mediante `ConocimientoPlugin`.
 - Entity Framework Core y SQL Server para usuarios, conversaciones e historial.
@@ -24,7 +24,6 @@ Prototipo académico de un chatbot construido con ASP.NET Core MVC y .NET 10.
 
    ```powershell
    dotnet user-secrets init --project Tp-Investigacion-NLP-Web
-   dotnet user-secrets set "OpenAI:ApiKey" "TU_CLAVE" --project Tp-Investigacion-NLP-Web
    dotnet user-secrets set "GithubModels:Token" "TU_TOKEN" --project Tp-Investigacion-NLP-Web
    ```
 

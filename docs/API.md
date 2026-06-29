@@ -24,7 +24,6 @@ Valores de `provider`:
 |---:|---|
 | 1 | Ollama |
 | 2 | GitHub Models |
-| 3 | OpenAI |
 
 ### Respuesta correcta
 

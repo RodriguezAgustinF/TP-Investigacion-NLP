@@ -1,26 +1,48 @@
-﻿@{
+@{
     Layout = "_AnonimoLayout";
     ViewData["Title"] = "Inicio";
 }
 
-<div class="auth-page">
-    <div class="card home-card text-center">
-        <div class="card-body">
-            <h1 class="display-5 mb-3">NLP</h1>
-
-            <div class="d-grid gap-2">
-                <a asp-controller="Usuario"
-                   asp-action="Login"
-                   class="btn btn-primary btn-lg">
-                    Iniciar sesion
-                </a>
-
-                <a asp-controller="Usuario"
-                   asp-action="Registro"
-                   class="btn btn-outline-secondary btn-lg">
-                    Registrarse
-                </a>
+<section class="hero-section">
+    <div class="row align-items-center g-5">
+        <div class="col-lg-7">
+            <span class="eyebrow"><span class="status-dot"></span> Proyecto académico · NLP en .NET</span>
+            <h1>Conversaciones inteligentes, construidas con herramientas reales.</h1>
+            <p class="hero-copy">
+                Un chatbot experimental que combina ASP.NET Core, Semantic Kernel, recuperación de conocimiento
+                y modelos locales o en la nube.
+            </p>
+            <div class="hero-actions">
+                <a asp-controller="Usuario" asp-action="Registro" class="btn btn-primary btn-lg">Comenzar ahora</a>
+                <a asp-controller="Usuario" asp-action="Login" class="btn btn-light btn-lg">Ya tengo una cuenta</a>
+            </div>
+            <div class="hero-meta">
+                <span>✓ Historial persistente</span>
+                <span>✓ Ollama local</span>
+                <span>✓ GitHub Models</span>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="hero-demo">
+                <div class="demo-topbar">
+                    <span class="demo-avatar">N</span>
+                    <div><strong>NLP Chat</strong><small>Asistente conectado</small></div>
+                    <span class="online-dot"></span>
+                </div>
+                <div class="demo-body">
+                    <div class="demo-message user-message">¿Cómo funciona el RAG del proyecto?</div>
+                    <div class="demo-message bot-message">
+                        Recupero información interna relevante y la uso como contexto antes de generar la respuesta.
+                    </div>
+                    <div class="typing"><i></i><i></i><i></i></div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+
+<section class="feature-strip">
+    <article><span>01</span><div><strong>Dos proveedores</strong><p>Elegí entre ejecución local o GitHub Models.</p></div></article>
+    <article><span>02</span><div><strong>Herramientas reales</strong><p>Function calling con Semantic Kernel.</p></div></article>
+    <article><span>03</span><div><strong>Contexto persistente</strong><p>Conversaciones guardadas con EF Core.</p></div></article>
+</section>

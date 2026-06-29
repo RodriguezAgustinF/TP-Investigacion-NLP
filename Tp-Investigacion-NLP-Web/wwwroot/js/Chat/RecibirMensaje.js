@@ -22,6 +22,11 @@
         const conversacionId = parseInt(conversacionIdInput.value);
         const provider = parseInt(providerSelect.value);
 
+        const bienvenida = chatMessages.querySelector(".conversation-welcome");
+        if (bienvenida) {
+            bienvenida.remove();
+        }
+
         agregarMensajeUsuario(mensaje);
 
         input.value = "";
@@ -98,18 +103,18 @@
 
     function agregarMensajeUsuario(texto) {
         const div = document.createElement("div");
-        div.className = "text-end mb-3";
-
-        const badge = document.createElement("span");
-        badge.className = "badge bg-primary";
-        badge.innerText = "Vos";
+        div.className = "message-row user-row";
 
         const contenido = document.createElement("div");
-        contenido.className = "mt-1 p-2 bg-white rounded d-inline-block text-start";
+        contenido.className = "message-bubble user-bubble";
         contenido.innerText = texto;
 
-        div.appendChild(badge);
         div.appendChild(contenido);
+
+        const avatar = document.createElement("span");
+        avatar.className = "message-avatar user-avatar";
+        avatar.innerText = "V";
+        div.appendChild(avatar);
 
         chatMessages.appendChild(div);
         scrollAbajo();
@@ -119,18 +124,18 @@
         const id = "msg-" + Date.now();
 
         const div = document.createElement("div");
-        div.className = "text-start mb-3";
+        div.className = "message-row bot-row";
         div.id = id;
 
-        const badge = document.createElement("span");
-        badge.className = "badge bg-success";
-        badge.innerText = "Asistente";
+        const avatar = document.createElement("span");
+        avatar.className = "message-avatar bot-avatar";
+        avatar.innerText = "N";
 
         const contenido = document.createElement("div");
-        contenido.className = "mt-1 p-2 bg-white rounded d-inline-block";
+        contenido.className = "message-bubble bot-bubble";
         contenido.innerText = texto;
 
-        div.appendChild(badge);
+        div.appendChild(avatar);
         div.appendChild(contenido);
 
         chatMessages.appendChild(div);
@@ -146,7 +151,7 @@
             return;
         }
 
-        const contenido = div.querySelector(".mt-1");
+        const contenido = div.querySelector(".message-bubble");
 
         if (contenido) {
             contenido.innerText = texto;

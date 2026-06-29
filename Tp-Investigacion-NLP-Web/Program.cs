@@ -9,9 +9,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.Configure<OpenAISettings>(
-    builder.Configuration.GetSection("OpenAI"));
-
 builder.Services.Configure<OllamaSettings>(
     builder.Configuration.GetSection("Ollama"));
 

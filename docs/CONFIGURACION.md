@@ -42,19 +42,12 @@ dotnet user-secrets set "GithubModels:Token" "TU_TOKEN" --project Tp-Investigaci
 
 Las propiedades no sensibles `BaseUrl` y `Model` permanecen en `appsettings.json`.
 
-## OpenAI
-
-```powershell
-dotnet user-secrets set "OpenAI:ApiKey" "TU_CLAVE" --project Tp-Investigacion-NLP-Web
-```
-
 ## Prioridad de configuración
 
 ASP.NET Core combina las fuentes habituales. Una variable de entorno utiliza `__` para representar `:`:
 
 ```powershell
 $env:GithubModels__Token="TU_TOKEN"
-$env:OpenAI__ApiKey="TU_CLAVE"
 $env:Ollama__Model="qwen3:8b"
 ```
 
@@ -75,6 +68,5 @@ La URL local exacta se informa en la consola y también puede consultarse en `Pr
 |---|---|---|
 | Ollama no responde | Servicio detenido o modelo ausente | Ejecutar `ollama serve` y `ollama pull qwen3:8b`. |
 | Falta `GITHUB_MODELS_TOKEN` | Token no configurado | Guardarlo con User Secrets y reiniciar. |
-| Error de OpenAI | Clave ausente, inválida o sin cuota | Revisar el secreto y la cuenta del proveedor. |
 | Error SQL Server | Instancia o conexión incorrecta | Sobrescribir `ConnectionStrings__NLPDatabase`. |
 | Herramienta no invocada | El modelo no soporta bien function calling | Probar otro modelo o formular una consulta explícita sobre el TP. |

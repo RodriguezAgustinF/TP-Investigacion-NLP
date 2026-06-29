@@ -1,31 +1,31 @@
-﻿@{
+@{
     Layout = "_BaseLayout";
 }
 
 @section Menu {
     <nav class="navbar navbar-expand-sm app-navbar">
-        <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                <span class="brand-mark">AC</span>
-                Administracion de Consorcios
+        <div class="container app-nav-container">
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                <span class="brand-mark">N</span>
+                <span>NLP Chat <small>UNLaM</small></span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAnonimo" aria-controls="navbarAnonimo"
-                    aria-expanded="false" aria-label="Mostrar navegacion">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAnonimo"
+                    aria-controls="navbarAnonimo" aria-expanded="false" aria-label="Mostrar navegación">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div id="navbarAnonimo" class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
-                    </li>
-                </ul>
+            <div id="navbarAnonimo" class="navbar-collapse collapse justify-content-end">
+                <div class="navbar-nav align-items-sm-center gap-sm-2">
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">Inicio</a>
+                    <a class="nav-link" asp-controller="Usuario" asp-action="Login">Iniciar sesión</a>
+                    <a class="btn btn-primary nav-cta" asp-controller="Usuario" asp-action="Registro">Crear cuenta</a>
+                </div>
             </div>
         </div>
     </nav>
 }
 
 <div class="container app-content">
-    <main role="main" class="pb-3">
+    <main role="main">
         @RenderBody()
     </main>
 </div>

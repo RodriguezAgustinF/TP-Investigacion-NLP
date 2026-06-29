@@ -64,7 +64,7 @@ sequenceDiagram
 
 - `ChatLogica`: coordina autorización, persistencia, título y generación.
 - `ChatbotService`: arma el historial, limita contexto, añade herramientas y llama al modelo.
-- `ChatClientFactory`: crea un `IChatClient` para Ollama, GitHub Models u OpenAI.
+- `ChatClientFactory`: crea un `IChatClient` para Ollama o GitHub Models.
 - `ConocimientoPlugin`: función nativa de Semantic Kernel que recupera fragmentos internos.
 - `ConversacionLogica`, `MensajeLogica` y `UsuarioLogica`: operaciones de dominio y persistencia.
 

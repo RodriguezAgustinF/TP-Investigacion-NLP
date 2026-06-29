@@ -1,9 +1,8 @@
-﻿@{
+@{
     Layout = "_AnonimoLayout";
-    ViewData["Title"] = "Iniciar Sesión";
+    ViewData["Title"] = "Iniciar sesión";
 }
-@section Scripts
-{
+@section Scripts {
     <script src="~/js/Usuario/ValidacionFormLogin.js"></script>
 }
 @model LoginViewModel
@@ -11,40 +10,27 @@
 <div class="auth-page">
     <div class="card auth-card">
         <div class="card-body">
+            <span class="auth-icon">N</span>
             <div class="text-center mb-4">
-                <h2>Iniciar sesion</h2>
-                <p class="text-muted">Ingresa tus credenciales para acceder al panel del consorcio.</p>
+                <h1>Qué bueno verte</h1>
+                <p class="text-muted">Ingresá para continuar tus conversaciones.</p>
             </div>
-
             <form asp-action="Login" asp-controller="Usuario" method="post">
                 <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
-
+                <div asp-validation-summary="ModelOnly" class="text-danger validation-summary mb-3"></div>
                 <div class="mb-3">
-                    <label asp-for="Email" class="form-label"></label>
-                    <input asp-for="Email" class="form-control" />
+                    <label asp-for="Email" class="form-label">Correo electrónico</label>
+                    <input asp-for="Email" class="form-control form-control-lg" placeholder="nombre@ejemplo.com" />
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
-
                 <div class="mb-4">
-                    <label asp-for="Password" class="form-label"></label>
-                    <input asp-for="Password" type="password" class="form-control" />
+                    <label asp-for="Password" class="form-label">Contraseña</label>
+                    <input asp-for="Password" type="password" class="form-control form-control-lg" placeholder="Ingresá tu contraseña" />
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
-
-                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
-
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-primary btn-lg">
-                        Ingresar
-                    </button>
-                </div>
+                <button type="submit" class="btn btn-primary btn-lg w-100">Ingresar al chat</button>
             </form>
-
-            <div class="text-center mt-4">
-                <a asp-action="Registro" asp-controller="Usuario">
-                    No tienes una cuenta? Registrate
-                </a>
-            </div>
+            <p class="auth-switch">¿Todavía no tenés cuenta? <a asp-action="Registro">Creala gratis</a></p>
         </div>
     </div>
 </div>

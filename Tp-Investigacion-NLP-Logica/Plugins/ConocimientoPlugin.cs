@@ -14,7 +14,7 @@ public sealed class ConocimientoPlugin
     [
         new("nlp chatbot", "Un NLP chatbot interpreta mensajes en lenguaje natural, conserva contexto, decide acciones y genera respuestas."),
         new("arquitectura dotnet", "La solución usa ASP.NET Core MVC y una API REST, una capa lógica, Entity Framework Core y proveedores de modelos desacoplados mediante IChatClient."),
-        new("proveedores modelos", "El prototipo permite seleccionar Ollama local, OpenAI o GitHub Models sin cambiar la lógica conversacional."),
+        new("proveedores modelos", "El prototipo permite seleccionar Ollama local o GitHub Models sin cambiar la lógica conversacional."),
         new("semantic kernel", "Semantic Kernel registra funciones nativas como plugins. El modelo puede invocarlas automáticamente para recuperar información verificable."),
         new("rag recuperación", "RAG recupera información de una fuente interna antes de generar la respuesta. Reduce alucinaciones y permite fundamentar respuestas del dominio."),
         new("seguridad secretos", "Las claves y tokens deben suministrarse con variables de entorno, User Secrets o un almacén como Azure Key Vault; nunca deben versionarse."),

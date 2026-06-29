@@ -12,7 +12,5 @@ public enum LLMProvider
     /// <summary>Modelo local mediante Ollama.</summary>
     Ollama = 1,
     /// <summary>Modelos publicados mediante GitHub Models.</summary>
-    Github = 2,
-    /// <summary>API pública de OpenAI.</summary>
-    OpenAI = 3
+    Github = 2
 }
