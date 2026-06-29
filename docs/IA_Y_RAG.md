@@ -2,7 +2,7 @@
 
 ## Abstracción del proveedor
 
-`ChatClientFactory` devuelve un `Microsoft.Extensions.AI.IChatClient`. Esto mantiene a `ChatbotService` independiente de OllamaSharp y del SDK de OpenAI.
+`ChatClientFactory` devuelve un `Microsoft.Extensions.AI.IChatClient`. Esto mantiene a `ChatbotService` independiente de los SDK concretos utilizados para conectar Ollama y GitHub Models.
 
 La canalización aplica:
 
@@ -17,7 +17,7 @@ Usa `OllamaApiClient`, por defecto con `qwen3:8b`. Es local y no requiere creden
 
 ### GitHub Models
 
-Utiliza el cliente compatible con OpenAI apuntando a `GithubModels:BaseUrl`. Necesita `GithubModels:Token`.
+GitHub Models expone una API compatible con el protocolo de OpenAI. Por eso la implementación reutiliza ese cliente técnico apuntándolo a `GithubModels:BaseUrl`, aunque OpenAI no se ofrece como proveedor seleccionable. Necesita `GithubModels:Token`.
 
 ## Construcción del contexto
 
