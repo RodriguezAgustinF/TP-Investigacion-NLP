@@ -18,7 +18,7 @@ public class UsuarioLogica : IUsuarioLogica
 
     public Usuario LoginUsuario(string email, string password)
     {
-        Usuario usuarioEncontrado = _db.Usuarios.FirstOrDefault(u => u.Email == email);
+        Usuario? usuarioEncontrado = _db.Usuarios.FirstOrDefault(u => u.Email == email);
         if (usuarioEncontrado == null)
         {
             throw new InvalidOperationException("Email o contraseña incorrectos.");

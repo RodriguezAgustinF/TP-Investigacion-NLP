@@ -41,11 +41,4 @@ public class MensajeLogica : IMensajeLogica
         _db.SaveChanges();
     }
 
-    public List<Mensaje> ObtenerMensajes(int conversacionId)
-    {
-        return _db.Mensajes
-            .Where(m => m.ConversacionId == conversacionId)
-            .OrderBy(m => m.Fecha)
-            .ToList();
-    }
 }

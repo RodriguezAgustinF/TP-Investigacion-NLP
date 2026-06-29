@@ -19,6 +19,11 @@ public class ChatController : Controller
     {
         int? usuarioId = HttpContext.Session.GetInt32("UsuarioId");
 
+        if (usuarioId == null)
+        {
+            return RedirectToAction("Login", "Usuario");
+        }
+
         var conversaciones = _conversacionLogica.ObtenerConversaciones(usuarioId.Value);
 
         Conversacion? conversacionActual = null;
@@ -49,6 +54,11 @@ public class ChatController : Controller
     public IActionResult NuevaConversacion()
     {
         int? usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+
+        if (usuarioId == null)
+        {
+            return RedirectToAction("Login", "Usuario");
+        }
 
         var conversacion = _conversacionLogica.CrearConversacion(usuarioId.Value);
 

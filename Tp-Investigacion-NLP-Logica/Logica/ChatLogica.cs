@@ -7,23 +7,39 @@ public class ChatLogica : IChatLogica
 {
     private readonly IMensajeLogica _mensajeLogica;
     private readonly IConversacionLogica _conversacionLogica;
-    private readonly ILLMServiceFactory _llmServiceFactory;
+    private readonly IChatbotService _chatbotService;
 
     public ChatLogica(
         IMensajeLogica mensajeLogica,
         IConversacionLogica conversacionLogica,
-        ILLMServiceFactory llmServiceFactory)
+        IChatbotService chatbotService)
     {
         _mensajeLogica = mensajeLogica;
         _conversacionLogica = conversacionLogica;
-        _llmServiceFactory = llmServiceFactory;
+        _chatbotService = chatbotService;
     }
 
     public async Task<ChatResponse> EnviarMensajeAsync(
-    int conversacionId,
-    string mensaje,
-    LLMProvider provider)
+        int conversacionId,
+        int usuarioId,
+        string mensaje,
+        LLMProvider provider,
+        CancellationToken cancellationToken = default)
     {
+        if (mensaje.Length > 4000)
+        {
+            throw new ArgumentException("El mensaje no puede superar los 4000 caracteres.", nameof(mensaje));
+        }
+
+        var conversacionAutorizada = _conversacionLogica.ObtenerConversacion(
+            conversacionId,
+            usuarioId);
+
+        if (conversacionAutorizada == null)
+        {
+            throw new KeyNotFoundException("La conversación no existe o no pertenece al usuario.");
+        }
+
         _mensajeLogica.AgregarMensajeUsuario(conversacionId, mensaje);
 
         string tituloActualizado = _conversacionLogica.ActualizarTituloSiEsNueva(
@@ -37,9 +53,10 @@ public class ChatLogica : IChatLogica
             throw new InvalidOperationException("No se encontró la conversación.");
         }
 
-        var llmService = _llmServiceFactory.GetService(provider);
-
-        string respuesta = await llmService.ObtenerRespuestaAsync(conversacion);
+        string respuesta = await _chatbotService.ObtenerRespuestaAsync(
+            conversacion,
+            provider,
+            cancellationToken);
 
         _mensajeLogica.AgregarMensajeAsistente(conversacionId, respuesta);
 

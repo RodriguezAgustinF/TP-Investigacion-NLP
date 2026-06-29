@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Tp_Investigacion_NLP_Web</RootNamespace>
+    <UserSecretsId>tp-investigacion-nlp-web-2026</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

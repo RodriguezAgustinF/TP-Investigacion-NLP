@@ -7,9 +7,6 @@ using Tp_Investigacion_NLP_Web.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-using var db = new NLPDbContext();
-db.Database.Migrate();
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.Configure<OpenAISettings>(
@@ -21,24 +18,12 @@ builder.Services.Configure<OllamaSettings>(
 builder.Services.Configure<GithubModelsSettings>(
     builder.Configuration.GetSection("GithubModels"));
 
-builder.Services.AddHttpClient<OllamaService>(client =>
-{
-    client.Timeout = TimeSpan.FromMinutes(10);
-});
-
-builder.Services.AddHttpClient<GithubModelsService>(client =>
-{
-    client.Timeout = TimeSpan.FromMinutes(2);
-});
-
-builder.Services.AddHttpClient<OpenAIService>(client =>
-{
-    client.Timeout = TimeSpan.FromMinutes(2);
-});
-
-builder.Services.AddScoped<ILLMServiceFactory, LLMServiceFactory>();
+builder.Services.AddScoped<IChatClientFactory, ChatClientFactory>();
+builder.Services.AddScoped<IChatbotService, ChatbotService>();
+builder.Services.AddScoped<Tp_Investigacion_NLP_Logica.Plugins.ConocimientoPlugin>();
 builder.Services.AddScoped<IChatLogica, ChatLogica>();
-builder.Services.AddDbContext<NLPDbContext>();
+builder.Services.AddDbContext<NLPDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("NLPDatabase")));
 builder.Services.AddScoped<IUsuarioLogica, UsuarioLogica>();
 builder.Services.AddScoped<IConversacionLogica, ConversacionLogica>();
 builder.Services.AddScoped<IMensajeLogica, MensajeLogica>();
@@ -53,10 +38,15 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
-app.UseSession();
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<NLPDbContext>();
+    db.Database.Migrate();
+}
 
-app.UseMiddleware<AuthMiddleware>();
 app.UseMiddleware<ApiExceptionMiddleware>();
+app.UseSession();
+app.UseMiddleware<AuthMiddleware>();
 
 // Configure the HTTP request pipeline.
 /*

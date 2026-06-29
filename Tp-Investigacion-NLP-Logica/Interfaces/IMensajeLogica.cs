@@ -8,5 +8,4 @@ public interface IMensajeLogica
 
     void AgregarMensajeAsistente(int conversacionId, string contenido);
 
-    List<Mensaje> ObtenerMensajes(int conversacionId);
 }
