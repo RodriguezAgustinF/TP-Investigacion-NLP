@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Options;
-using OpenAI.Chat;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -9,14 +8,14 @@ using Tp_Investigacion_NLP_Logica.Interfaces;
 
 namespace Tp_Investigacion_NLP_Logica.Logica;
 
-public class OpenAIService : ILLMService
+public class GithubModelsService : ILLMService
 {
     private readonly HttpClient _httpClient;
-    private readonly OpenAISettings _settings;
+    private readonly GithubModelsSettings _settings;
 
-    public OpenAIService(
+    public GithubModelsService(
         HttpClient httpClient,
-        IOptions<OpenAISettings> options)
+        IOptions<GithubModelsSettings> options)
     {
         _httpClient = httpClient;
         _settings = options.Value;
@@ -24,19 +23,14 @@ public class OpenAIService : ILLMService
 
     public async Task<string> ObtenerRespuestaAsync(Conversacion conversacion)
     {
-        return "OpenAI no esta implementado por falta de presupuesto";
-
-        if (string.IsNullOrWhiteSpace(_settings.ApiKey))
+        var request = new GithubModelsRequest
         {
-            return "No está configurada la API Key de OpenAI.";
-        }
-
-        var request = new OpenAIRequest
-        {
-            Model = _settings.Model
+            Model = _settings.Model,
+            Temperature = 0.7,
+            Max_Tokens = 800
         };
 
-        request.Messages.Add(new OpenAIMessage
+        request.Messages.Add(new GithubModelsMessage
         {
             Role = "system",
             Content =
@@ -53,21 +47,28 @@ Si no sabés algo o no tenés información actualizada, aclaralo.
 
         foreach (var mensaje in conversacion.Mensajes.OrderBy(m => m.Fecha))
         {
-            request.Messages.Add(new OpenAIMessage
+            request.Messages.Add(new GithubModelsMessage
             {
                 Role = mensaje.Rol,
                 Content = mensaje.Contenido
             });
         }
 
-        string json = JsonSerializer.Serialize(request);
+        var json = JsonSerializer.Serialize(
+            request,
+            new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
+            });
 
         using var httpRequest = new HttpRequestMessage(
             HttpMethod.Post,
             $"{_settings.BaseUrl}/chat/completions");
 
         httpRequest.Headers.Authorization =
-            new AuthenticationHeaderValue("Bearer", _settings.ApiKey);
+            new AuthenticationHeaderValue("Bearer", _settings.Token);
+
+        httpRequest.Headers.Add("X-GitHub-Api-Version", "2022-11-28");
 
         httpRequest.Content = new StringContent(
             json,
@@ -81,10 +82,10 @@ Si no sabés algo o no tenés información actualizada, aclaralo.
         if (!response.IsSuccessStatusCode)
         {
             throw new InvalidOperationException(
-                $"Error de OpenAI: {response.StatusCode} - {contenido}");
+                $"Error de GitHub Models: {response.StatusCode} - {contenido}");
         }
 
-        var respuesta = JsonSerializer.Deserialize<OpenAIResponse>(
+        var respuesta = JsonSerializer.Deserialize<GithubModelsResponse>(
             contenido,
             new JsonSerializerOptions
             {
@@ -97,6 +98,6 @@ Si no sabés algo o no tenés información actualizada, aclaralo.
             .Message?
             .Content?
             .Trim()
-            ?? "OpenAI no devolvió una respuesta.";
+            ?? "GitHub Models no devolvió una respuesta.";
     }
 }

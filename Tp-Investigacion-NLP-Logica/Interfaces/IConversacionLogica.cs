@@ -8,4 +8,7 @@ public interface IConversacionLogica
     List<Conversacion> ObtenerConversaciones(int usuarioId);
     Conversacion ObtenerConversacion(int conversacionId, int usuarioId);
     Conversacion ObtenerConversacionCompleta(int conversacionId);
+    string ActualizarTituloSiEsNueva(int conversacionId, string mensaje);
+
+    void EliminarConversacion(int conversacionId, int usuarioId);
 }

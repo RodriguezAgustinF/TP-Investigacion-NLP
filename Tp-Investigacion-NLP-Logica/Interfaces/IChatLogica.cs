@@ -1,6 +1,8 @@
-﻿namespace Tp_Investigacion_NLP_Logica.Interfaces;
+﻿using Tp_Investigacion_NLP_Logica.DTO;
+
+namespace Tp_Investigacion_NLP_Logica.Interfaces;
 
 public interface IChatLogica
 {
-    Task EnviarMensajeAsync(int conversacionId, string mensaje);
+    Task<ChatResponse> EnviarMensajeAsync(int conversacionId, string mensaje, LLMProvider provider);
 }

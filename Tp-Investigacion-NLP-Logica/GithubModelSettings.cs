@@ -4,9 +4,11 @@ using System.Text;
 
 namespace Tp_Investigacion_NLP_Logica;
 
-public class OpenAISettings
+public class GithubModelsSettings
 {
     public string BaseUrl { get; set; } = string.Empty;
+
     public string Model { get; set; } = string.Empty;
-    public string ApiKey { get; set; } = string.Empty;
+
+    public string Token { get; set; } = string.Empty;
 }

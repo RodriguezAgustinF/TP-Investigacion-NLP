@@ -3,82 +3,73 @@ using Tp_Investigacion_NLP_Entidades.Entidades;
 using Tp_Investigacion_NLP_Logica.Interfaces;
 using Tp_Investigacion_NLP_Web.Models;
 
-namespace Tp_Investigacion_NLP_Web.Controllers
+namespace Tp_Investigacion_NLP_Web.Controllers;
+
+public class ChatController : Controller
 {
-    public class ChatController : Controller
+    private readonly IConversacionLogica _conversacionLogica;
+
+    public ChatController(IConversacionLogica conversacionLogica)
     {
-        private readonly IConversacionLogica _conversacionLogica;
-        private readonly IChatLogica _chatLogica;
+        _conversacionLogica = conversacionLogica;
+    }
 
-        public ChatController(IConversacionLogica conversacionLogica, IChatLogica chatLogica)
+    [HttpGet]
+    public IActionResult Index(int? id)
+    {
+        int? usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+
+        var conversaciones = _conversacionLogica.ObtenerConversaciones(usuarioId.Value);
+
+        Conversacion? conversacionActual = null;
+
+        if (id.HasValue)
         {
-            _conversacionLogica = conversacionLogica;
-            _chatLogica = chatLogica;
+            conversacionActual = _conversacionLogica.ObtenerConversacion(
+                id.Value,
+                usuarioId.Value);
+        }
+        else if (conversaciones.Any())
+        {
+            conversacionActual = _conversacionLogica.ObtenerConversacion(
+                conversaciones.First().Id,
+                usuarioId.Value);
         }
 
-        [HttpGet]
-        public IActionResult Index(int? id)
+        var viewModel = new ChatViewModel
         {
-            int? usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+            Conversaciones = conversaciones,
+            ConversacionActual = conversacionActual
+        };
 
-            if (usuarioId == null)
-                return RedirectToAction("Login", "Usuario");
+        return View(viewModel);
+    }
 
-            var conversaciones = _conversacionLogica.ObtenerConversaciones(usuarioId.Value);
+    [HttpPost]
+    public IActionResult NuevaConversacion()
+    {
+        int? usuarioId = HttpContext.Session.GetInt32("UsuarioId");
 
-            Conversacion? conversacionActual = null;
+        var conversacion = _conversacionLogica.CrearConversacion(usuarioId.Value);
 
-            if (id.HasValue)
-            {
-                conversacionActual = _conversacionLogica.ObtenerConversacion(id.Value, usuarioId.Value);
-            }
-            else if (conversaciones.Any())
-            {
-                conversacionActual = conversaciones.First();
-            }
+        return RedirectToAction(nameof(Index), new
+        {
+            id = conversacion.Id
+        });
+    }
 
-            var vm = new ChatViewModel
-            {
-                Conversaciones = conversaciones,
-                ConversacionActual = conversacionActual
-            };
+    [HttpPost]
+    public IActionResult EliminarConversacion(int id)
+    {
+        int? usuarioId = HttpContext.Session.GetInt32("UsuarioId");
 
-            return View(vm);
+        if (usuarioId == null)
+        {
+            return RedirectToAction("Login", "Usuario");
         }
 
-        [HttpPost]
-        public IActionResult NuevaConversacion()
-        {
-            int? usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+        _conversacionLogica.EliminarConversacion(id, usuarioId.Value);
 
-            if (usuarioId == null)
-                return RedirectToAction("Login", "Usuario");
-
-            var conversacion = _conversacionLogica.CrearConversacion(usuarioId.Value);
-
-            return RedirectToAction(nameof(Index), new
-            {
-                id = conversacion.Id
-            });
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> EnviarMensaje(int conversacionId, string nuevoMensaje)
-        {
-            if (string.IsNullOrWhiteSpace(nuevoMensaje))
-            {
-                return RedirectToAction(nameof(Index), new
-                {
-                    id = conversacionId
-                });
-            }
-
-            await _chatLogica.EnviarMensajeAsync(conversacionId, nuevoMensaje);
-
-            return RedirectToAction(nameof(Index), new
-            {
-                id = conversacionId
-            });
-        }
+        return RedirectToAction(nameof(Index));
     }
 }

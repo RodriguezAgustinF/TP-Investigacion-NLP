@@ -4,115 +4,130 @@
     ViewData["Title"] = "Chat";
 }
 
-<div class="row">
+@section Scripts {
+    <script src="~/js/Chat/RecibirMensaje.js"></script>
+}
 
-    <!-- Sidebar -->
-    <div class="col-3 border-end">
+<div class="container-fluid">
+    <div class="row">
 
-        <form asp-action="NuevaConversacion" method="post">
+        <div class="col-3 border-end" style="height: 80vh; overflow-y: auto;">
 
-            <button class="btn btn-success w-100 mb-3">
-                + Nuevo chat
-            </button>
+            <form asp-action="NuevaConversacion" method="post">
+                <button class="btn btn-success w-100 mb-3" type="submit">
+                    + Nuevo chat
+                </button>
+            </form>
 
-        </form>
+            <h5>Conversaciones</h5>
 
-        @foreach (var conversacion in Model.Conversaciones)
-        {
-            <a asp-action="Index"
-               asp-route-id="@conversacion.Id"
-               class="list-group-item list-group-item-action mb-2">
-
-                @conversacion.Titulo
-
-            </a>
-        }
-
-    </div>
-
-    <!-- Chat -->
-
-    <div class="col-9">
-
-        @if (Model.ConversacionActual == null)
-        {
-            <div class="text-center mt-5">
-
-                <h2>Bienvenido 👋</h2>
-
-                <p>Creá una conversación para comenzar.</p>
-
-            </div>
-        }
-        else
-        {
-            <h3>@Model.ConversacionActual.Titulo</h3>
-
-            <hr />
-
-            <div style="height:500px; overflow-y:auto;" class="mb-3">
-
-                @foreach (var mensaje in Model.ConversacionActual.Mensajes)
+            <div class="list-group">
+                @foreach (var conversacion in Model.Conversaciones)
                 {
-                    if (mensaje.Rol == "user")
-                    {
-                        <div class="text-end mb-3">
+                    var activeClass = Model.ConversacionActual?.Id == conversacion.Id
+                        ? "active"
+                        : "";
 
-                            <span class="badge bg-primary">
-                                Vos
-                            </span>
+                    <div class="d-flex mb-2">
+                        <a asp-action="Index"
+                           asp-route-id="@conversacion.Id"
+                           id="conversacion-link-@conversacion.Id"
+                           class="list-group-item list-group-item-action @activeClass flex-grow-1">
+                            @conversacion.Titulo
+                        </a>
 
-                            <div class="mt-1">
+                        <form asp-action="EliminarConversacion"
+                              asp-route-id="@conversacion.Id"
+                              method="post"
+                              class="ms-1">
 
-                                @mensaje.Contenido
-
-                            </div>
-
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="text-start mb-3">
-
-                            <span class="badge bg-success">
-                                Asistente
-                            </span>
-
-                            <div class="mt-1">
-
-                                @mensaje.Contenido
-
-                            </div>
-
-                        </div>
-                    }
+                            <button type="submit"
+                                    class="btn btn-outline-danger btn-sm">
+                                ✕
+                            </button>
+                        </form>
+                    </div>
                 }
-
             </div>
+        </div>
 
-            <form asp-action="EnviarMensaje" method="post">
+        <div class="col-9">
 
-                <input type="hidden"
-                       name="conversacionId"
-                       value="@Model.ConversacionActual.Id" />
+            @if (Model.ConversacionActual == null)
+            {
+                <div class="text-center mt-5">
+                    <h2>Bienvenido al chat</h2>
+                    <p>Creá una conversación para comenzar.</p>
+                </div>
+            }
+            else
+            {
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 id="tituloConversacion">@Model.ConversacionActual.Titulo</h3>
 
-                <div class="input-group">
+                    <div style="width: 250px;">
+                        <label for="providerSelect" class="form-label mb-1">
+                            Proveedor de IA
+                        </label>
 
-                    <input asp-for="NuevoMensaje"
-                           class="form-control"
-                           placeholder="Escribí un mensaje..." />
-
-                    <button class="btn btn-primary">
-
-                        Enviar
-
-                    </button>
-
+                        <select id="providerSelect" class="form-select">
+                            <option value="1">Ollama</option>
+                            <option value="2">GitHub Models</option>
+                            <option value="3">OpenAI</option>
+                        </select>
+                    </div>
                 </div>
 
-            </form>
-        }
+                <hr />
 
+                <div id="chatMessages"
+                     style="height: 500px; overflow-y: auto; border: 1px solid #ddd; border-radius: 8px; padding: 15px;"
+                     class="mb-3 bg-light">
+
+                    @foreach (var mensaje in Model.ConversacionActual.Mensajes.OrderBy(m => m.Fecha))
+                    {
+                        if (mensaje.Rol == "user")
+                        {
+                            <div class="text-end mb-3">
+                                <span class="badge bg-primary">Vos</span>
+
+                                <div class="mt-1 p-2 bg-white rounded d-inline-block text-start">
+                                    @mensaje.Contenido
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-start mb-3">
+                                <span class="badge bg-success">Asistente</span>
+
+                                <div class="mt-1 p-2 bg-white rounded d-inline-block">
+                                    @mensaje.Contenido
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+
+                <form id="chatForm">
+                    <input type="hidden"
+                           id="conversacionId"
+                           value="@Model.ConversacionActual.Id" />
+
+                    <div class="input-group">
+                        <input id="mensajeInput"
+                               class="form-control"
+                               placeholder="Escribí un mensaje..."
+                               autocomplete="off" />
+
+                        <button id="enviarBtn"
+                                class="btn btn-primary"
+                                type="submit">
+                            Enviar
+                        </button>
+                    </div>
+                </form>
+            }
+        </div>
     </div>
-
 </div>

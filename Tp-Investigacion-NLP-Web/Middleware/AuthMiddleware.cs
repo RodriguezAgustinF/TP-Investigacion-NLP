@@ -2,7 +2,6 @@
 
 public class AuthMiddleware
 {
-
     private readonly RequestDelegate _next;
 
     public AuthMiddleware(RequestDelegate next)
@@ -20,9 +19,7 @@ public class AuthMiddleware
             path == "/home/index" ||
             path == "/usuario/login" ||
             path == "/usuario/registro" ||
-            path.StartsWith("/css") ||
-            path.StartsWith("/js") ||
-            path.StartsWith("/lib");
+            EsArchivoPublico(path);
 
         if (rutaPublica)
         {
@@ -34,10 +31,40 @@ public class AuthMiddleware
 
         if (usuarioId == null)
         {
+            if (EsApi(path))
+            {
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                context.Response.ContentType = "application/json";
+
+                await context.Response.WriteAsync("""
+                {
+                    "error": "Usuario no autenticado."
+                }
+                """);
+
+                return;
+            }
+
             context.Response.Redirect($"/Usuario/Login?returnUrl={path}");
             return;
         }
 
         await _next(context);
+    }
+
+    private bool EsApi(string? path)
+    {
+        return path != null && path.StartsWith("/api");
+    }
+
+    private bool EsArchivoPublico(string? path)
+    {
+        if (path == null)
+            return false;
+
+        return path.StartsWith("/css") ||
+               path.StartsWith("/js") ||
+               path.StartsWith("/lib") ||
+               path.StartsWith("/favicon");
     }
 }

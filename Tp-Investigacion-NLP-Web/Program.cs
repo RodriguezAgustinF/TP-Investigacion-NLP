@@ -18,13 +18,25 @@ builder.Services.Configure<OpenAISettings>(
 builder.Services.Configure<OllamaSettings>(
     builder.Configuration.GetSection("Ollama"));
 
-builder.Services.AddHttpClient();
-builder.Services.AddHttpClient<ILLMService, OllamaService>(client =>
+builder.Services.Configure<GithubModelsSettings>(
+    builder.Configuration.GetSection("GithubModels"));
+
+builder.Services.AddHttpClient<OllamaService>(client =>
 {
-    client.Timeout = TimeSpan.FromMinutes(5);
+    client.Timeout = TimeSpan.FromMinutes(10);
 });
 
-builder.Services.AddScoped<ILLMService, OllamaService>();
+builder.Services.AddHttpClient<GithubModelsService>(client =>
+{
+    client.Timeout = TimeSpan.FromMinutes(2);
+});
+
+builder.Services.AddHttpClient<OpenAIService>(client =>
+{
+    client.Timeout = TimeSpan.FromMinutes(2);
+});
+
+builder.Services.AddScoped<ILLMServiceFactory, LLMServiceFactory>();
 builder.Services.AddScoped<IChatLogica, ChatLogica>();
 builder.Services.AddDbContext<NLPDbContext>();
 builder.Services.AddScoped<IUsuarioLogica, UsuarioLogica>();
@@ -44,12 +56,14 @@ var app = builder.Build();
 app.UseSession();
 
 app.UseMiddleware<AuthMiddleware>();
+app.UseMiddleware<ApiExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
+/*
 app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 app.UseHsts();
-
+*/
 
 app.UseHttpsRedirection();
 app.UseRouting();
@@ -58,6 +72,7 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 
+app.MapControllers();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
